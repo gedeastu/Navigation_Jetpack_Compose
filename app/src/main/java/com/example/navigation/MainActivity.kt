@@ -9,7 +9,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.data.EmptyGroup.name
 import com.example.navigation.ui.theme.NavigationTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,13 +28,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Main() {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
 //@Preview(showBackground = true)
 //@Composable
