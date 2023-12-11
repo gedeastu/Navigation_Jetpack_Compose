@@ -31,10 +31,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginPage() {
+fun LoginPage(navController: NavController) {
     val emailFieldValue = remember {
         mutableStateOf("")
     }
@@ -107,8 +108,11 @@ fun LoginPage() {
                     )
                 Spacer(modifier = Modifier.height(20.dp))
                 Button(
-                    onClick = { /*TODO*/ }, 
-                    modifier = Modifier.height(20.dp),
+                    onClick = {
+                              //navigate() berpindah page dengan menggunakan route ( route bersifat absolute )
+                              navController.navigate("HomePage")
+                    },
+                    modifier = Modifier.height(40.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = colorResource(id = R.color.teal_700)
                     ),

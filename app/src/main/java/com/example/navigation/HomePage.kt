@@ -5,10 +5,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -19,20 +21,41 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomePage() {
+fun HomePage(navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
+                navigationIcon = {
+
+                },
                 title = { Text(text = "This your Act nigga", color = Color.White, fontSize = 20.sp) },
                 colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = colorResource(id = R.color.purple_500)
                 ),
                 actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(Icons.Filled.Share, contentDescription = "Share" )
+                    Button(
+                        onClick = { /*TODO*/ },
+                        modifier = Modifier,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Transparent
+                        ),
+                        ) {
+                        Icon(Icons.Filled.Share, contentDescription = "Share",)
+                    }
+                    Button(
+                        //popBackStack() kembali ke page yang sebelumnya
+                        onClick = { navController.popBackStack() },
+                        colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent
+                        ),
+                        )
+                    {
+                        Icon(Icons.Filled.ExitToApp, contentDescription = "Log Out")
+                        Text(text = "Logout")
                     }
                 }
             )
