@@ -110,7 +110,10 @@ fun LoginPage(navController: NavController) {
                 Button(
                     onClick = {
                               //navigate() berpindah page dengan menggunakan route ( route bersifat absolute )
-                              navController.navigate("HomePage")
+                              navController.navigate("HomePage"){
+                                  //inclusive = true, if we're goes to second page from first page, the first page is destroyed and when we go back again it will closed the app
+                                  popUpTo("LoginPage"){inclusive = true}
+                              }
                     },
                     modifier = Modifier.height(40.dp),
                     colors = ButtonDefaults.buttonColors(
