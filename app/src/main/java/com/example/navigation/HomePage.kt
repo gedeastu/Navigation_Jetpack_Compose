@@ -38,7 +38,7 @@ fun HomePage(navController: NavController) {
                             containerColor = Color.Transparent
                         ),
                     ) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Share",)
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "Share")
                     }
                 },
                 title = { Text(text = "This your Act nigga", color = Color.White, fontSize = 20.sp) },
