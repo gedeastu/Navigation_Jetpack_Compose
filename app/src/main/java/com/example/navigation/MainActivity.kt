@@ -24,7 +24,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     //Main()
-                    Navigation()
+                    //Navigation()
+                    Navigation2point0()
                 }
             }
         }
@@ -47,8 +48,8 @@ fun Navigation(){
 }
 
 @Composable
-fun Navigation2point0{
-
+fun Navigation2point0(){
+    com.example.navigation.navigationFromYT.Navigation()
 }
 //@Preview(showBackground = true)
 //@Composable
