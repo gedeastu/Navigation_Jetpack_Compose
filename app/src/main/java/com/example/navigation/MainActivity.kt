@@ -45,6 +45,11 @@ fun Navigation(){
     }
 
 }
+
+@Composable
+fun Navigation2point0{
+
+}
 //@Preview(showBackground = true)
 //@Composable
 //fun GreetingPreview() {

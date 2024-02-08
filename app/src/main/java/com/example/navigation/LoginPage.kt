@@ -55,7 +55,7 @@ fun LoginPage(navController: NavController) {
                 )
             )
         },
-        content = { paddingValues->
+        content = { paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
