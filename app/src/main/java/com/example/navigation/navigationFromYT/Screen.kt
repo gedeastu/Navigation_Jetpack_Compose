@@ -6,12 +6,16 @@ sealed class Screen(
     object LoginScreen : Screen("login_screen")
     object HomeScreen : Screen("home_screen")
 
-    fun withArgs(vararg args:String):String{
-        return buildString {
-            append(route)
-            args.forEach { arg ->
-                append("/$arg")
-            }
-        }
-    }
+    object ItemDetailScreen : Screen("item_detail_screen")
+
+    object  ItemDetailScreenPart2 : Screen("item_detail_part2_screen")
+
+//    fun withArgs(vararg args:String):String{
+//        return buildString {
+//            append(route)
+//            args.forEach { arg ->
+//                append("/$arg")
+//            }
+//        }
+//    }
 }
