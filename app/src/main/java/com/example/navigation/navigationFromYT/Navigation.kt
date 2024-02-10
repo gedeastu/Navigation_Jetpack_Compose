@@ -24,39 +24,39 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 
 @Composable
 fun Navigation(){
     val navController = rememberNavController()
     //val context = LocalContext.current
-    NavHost(
-        navController = navController,
-        startDestination = Screen.LoginScreen.route
-    ){
+    NavHost(navController = navController, startDestination = Screen.LoginScreen.route){
         composable(route = Screen.LoginScreen.route){
             LoginScreen(navController = navController)
         }
+
         composable(
-            route = Screen.HomeScreen.route,
-//            arguments = listOf(
-//                navArgument("name"){
-//                    type = NavType.StringType
-//                    defaultValue = "name"
-//                    nullable = true
-//                }
-//            )
-        ){
-            //entry ->
+            route = Screen.HomeScreen.route + "/{name}",
+            arguments = listOf(
+                navArgument("name"){
+                    type = NavType.StringType
+                    defaultValue = "name"
+                    nullable = true
+                }
+            )
+        ){ entry ->
             HomeScreen(
-                //name = entry.arguments?.getString("name"),
+                name = entry.arguments?.getString("name"),
                 itemList = itemList,
                 onItemClick = { item ->
                     navController.navigate("${Screen.ItemDetailScreen.route}/${item.id}")
             })
         }
+
         composable("item_detail_screen/{itemId}") { backStackEntry ->
             val itemId = backStackEntry.arguments?.getString("itemId")?.toIntOrNull()
             if (itemId != null) {
@@ -72,6 +72,7 @@ fun Navigation(){
                 // Handle missing or invalid itemId or itemName
             }
         }
+
         composable("item_detail_part2_screen/{itemId}") { backStackEntry ->
             val itemId = backStackEntry.arguments?.getString("itemId")?.toIntOrNull()
             if (itemId != null) {
@@ -85,6 +86,7 @@ fun Navigation(){
                 // Handle missing or invalid itemId or itemName
             }
         }
+
     }
 }
 
@@ -109,8 +111,8 @@ fun LoginScreen(navController: NavController){
         )
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = {
-                    navController.navigate(Screen.HomeScreen.route)
-            //navController.navigate(Screen.HomeScreen.withArgs(nameInputField))
+                    //navController.navigate(Screen.HomeScreen.route)
+            navController.navigate(Screen.HomeScreen.withArgs(nameInputField))
         }, modifier = Modifier.align(Alignment.End)) {
             Text(text = "Goes to Home")
         }
@@ -118,12 +120,12 @@ fun LoginScreen(navController: NavController){
 }
 
 @Composable
-fun HomeScreen(itemList: List<Item>,onItemClick:(Item) -> Unit){
+fun HomeScreen(name:String?,itemList: List<Item>,onItemClick:(Item) -> Unit){
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
     ) {
-        Text(text = "Hello Astu")
+        Text(text = "Hello $name")
         LazyColumn(content = {
             items(itemList){ item ->
                 Text(
