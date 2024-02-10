@@ -35,10 +35,12 @@ fun Navigation(){
     val navController = rememberNavController()
     //val context = LocalContext.current
     NavHost(navController = navController, startDestination = Screen.LoginScreen.route){
+        //Login Route
         composable(route = Screen.LoginScreen.route){
             LoginScreen(navController = navController)
         }
 
+        //Home Route
         composable(
             route = Screen.HomeScreen.route + "/{name}",
             arguments = listOf(
@@ -53,17 +55,20 @@ fun Navigation(){
                 name = entry.arguments?.getString("name"),
                 itemList = itemList,
                 onItemClick = { item ->
-                    navController.navigate("${Screen.ItemDetailScreen.route}/${item.id}")
+                    //navController.navigate("${Screen.ItemDetailScreen.route}/${item.id}")
+                    navController.navigate(Screen.ItemDetailScreen.withArgs("${item.id}"))
             })
         }
 
-        composable("item_detail_screen/{itemId}") { backStackEntry ->
-            val itemId = backStackEntry.arguments?.getString("itemId")?.toIntOrNull()
+        //Item Detail Screen
+        composable("item_detail_screen/{itemId}") { entry ->
+            val itemId = entry.arguments?.getString("itemId")?.toIntOrNull()
             if (itemId != null) {
                 val item = itemList.find { it.id == itemId }
                 if (item != null) {
                     ItemDetailScreen(item = item, itemList2 = itemList2 ,onItemClick = {item2 ->
-                        navController.navigate("${Screen.ItemDetailScreenPart2.route}/${item2.id}")
+                        //navController.navigate("${Screen.ItemDetailScreenPart2.route}/${item2.id}")
+                        navController.navigate(Screen.ItemDetailScreenPart2.withArgs("${item2.id}"))
                     })
                 } else {
                     // Handle invalid itemId
@@ -73,8 +78,9 @@ fun Navigation(){
             }
         }
 
-        composable("item_detail_part2_screen/{itemId}") { backStackEntry ->
-            val itemId = backStackEntry.arguments?.getString("itemId")?.toIntOrNull()
+        //Item Detail Part 2 Screen
+        composable("item_detail_part2_screen/{itemId}") { entry ->
+            val itemId = entry.arguments?.getString("itemId")?.toIntOrNull()
             if (itemId != null) {
                 val item2 = itemList2.find { it.id == itemId }
                 if (item2 != null) {
@@ -112,7 +118,7 @@ fun LoginScreen(navController: NavController){
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = {
                     //navController.navigate(Screen.HomeScreen.route)
-            navController.navigate(Screen.HomeScreen.withArgs(nameInputField))
+                    navController.navigate(Screen.HomeScreen.withArgs(nameInputField))
         }, modifier = Modifier.align(Alignment.End)) {
             Text(text = "Goes to Home")
         }
