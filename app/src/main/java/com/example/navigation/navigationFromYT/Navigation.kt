@@ -29,6 +29,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.navigation
 
 @Composable
 fun Navigation(){
@@ -40,56 +41,57 @@ fun Navigation(){
             LoginScreen(navController = navController)
         }
 
-        //Home Route
-        composable(
-            route = Screen.HomeScreen.route + "/{name}",
-            arguments = listOf(
-                navArgument("name"){
-                    type = NavType.StringType
-                    defaultValue = "name"
-                    nullable = true
-                }
-            )
-        ){ entry ->
-            HomeScreen(
-                name = entry.arguments?.getString("name"),
-                itemList = itemList,
-                onItemClick = { item ->
-                    //navController.navigate("${Screen.ItemDetailScreen.route}/${item.id}")
-                    navController.navigate(Screen.ItemDetailScreen.withArgs("${item.id}"))
-            })
-        }
-
-        //Item Detail Screen
-        composable("item_detail_screen/{itemId}") { entry ->
-            val itemId = entry.arguments?.getString("itemId")?.toIntOrNull()
-            if (itemId != null) {
-                val item = itemList.find { it.id == itemId }
-                if (item != null) {
-                    ItemDetailScreen(item = item, itemList2 = itemList2 ,onItemClick = {item2 ->
-                        //navController.navigate("${Screen.ItemDetailScreenPart2.route}/${item2.id}")
-                        navController.navigate(Screen.ItemDetailScreenPart2.withArgs("${item2.id}"))
+        navigation(startDestination = Screen.HomeScreen.route + "/{name}", route = Screen.HomeScreen.route){
+            //Home Route
+            composable( route = Screen.HomeScreen.route + "/{name}", arguments = listOf( navArgument("name"){
+                type = NavType.StringType
+                defaultValue = "name"
+                nullable = true
+            })){ entry ->
+                HomeScreen(
+                    name = entry.arguments?.getString("name"),
+                    itemList = itemList,
+                    onItemClick = { item ->
+                        //navController.navigate("${Screen.ItemDetailScreen.route}/${item.id}")
+                        navController.navigate(Screen.ItemDetailScreen.withArgs("${item.id}"))
                     })
-                } else {
-                    // Handle invalid itemId
-                }
-            } else {
-                // Handle missing or invalid itemId or itemName
             }
-        }
 
-        //Item Detail Part 2 Screen
-        composable("item_detail_part2_screen/{itemId}") { entry ->
-            val itemId = entry.arguments?.getString("itemId")?.toIntOrNull()
-            if (itemId != null) {
-                val item2 = itemList2.find { it.id == itemId }
-                if (item2 != null) {
-                    ItemDetailScreenPart2(item2 = item2)
+            //Item Detail Screen
+            composable("item_detail_screen/{itemId}") { entry ->
+                val itemId = entry.arguments?.getString("itemId")?.toIntOrNull()
+                if (itemId != null) {
+                    val item = itemList.find { it.id == itemId }
+                    if (item != null) {
+                        ItemDetailScreen(item = item, itemList2 = itemList2 ,onItemClick = {item2 ->
+                            //navController.navigate("${Screen.ItemDetailScreenPart2.route}/${item2.id}")
+                            navController.navigate(Screen.ItemDetailScreenPart2.withArgs("${item2.id}"))
+                        }, onPopBackStack = {
+                            navController.popBackStack()
+                        })
+                    } else {
+                        // Handle invalid itemId
+                    }
                 } else {
-                    // Handle invalid itemId
+                    // Handle missing or invalid itemId or itemName
                 }
-            } else {
-                // Handle missing or invalid itemId or itemName
+            }
+
+            //Item Detail Part 2 Screen
+            composable("item_detail_part2_screen/{itemId}") { entry ->
+                val itemId = entry.arguments?.getString("itemId")?.toIntOrNull()
+                if (itemId != null) {
+                    val item2 = itemList2.find { it.id == itemId }
+                    if (item2 != null) {
+                        ItemDetailScreenPart2(item2 = item2, onPopBackStack = {
+                            navController.popBackStack()
+                        })
+                    } else {
+                        // Handle invalid itemId
+                    }
+                } else {
+                    // Handle missing or invalid itemId or itemName
+                }
             }
         }
 
@@ -118,7 +120,9 @@ fun LoginScreen(navController: NavController){
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = {
                     //navController.navigate(Screen.HomeScreen.route)
-                    navController.navigate(Screen.HomeScreen.withArgs(nameInputField))
+                    navController.navigate(Screen.HomeScreen.withArgs(nameInputField)){
+                        popUpTo(Screen.LoginScreen.route){inclusive = true}
+                    }
         }, modifier = Modifier.align(Alignment.End)) {
             Text(text = "Goes to Home")
         }
@@ -146,7 +150,7 @@ fun HomeScreen(name:String?,itemList: List<Item>,onItemClick:(Item) -> Unit){
 }
 
 @Composable
-fun ItemDetailScreen(item: Item,itemList2: List<Item2>,onItemClick: (Item2) -> Unit) {
+fun ItemDetailScreen(item: Item,itemList2: List<Item2>,onItemClick: (Item2) -> Unit, onPopBackStack: () -> Unit) {
     println(itemList2)
     Column {
         Text(text = "Item: ${item.name}\nDescription: ${item.description}")
@@ -161,12 +165,24 @@ fun ItemDetailScreen(item: Item,itemList2: List<Item2>,onItemClick: (Item2) -> U
                         .padding(16.dp))
             }
         })
+        Button(onClick = {
+            onPopBackStack()
+        }) {
+            Text(text = "Back to Home")
+        }
     }
     // Display item details here
 }
 
 @Composable
-fun ItemDetailScreenPart2(item2: Item2) {
+fun ItemDetailScreenPart2(item2: Item2,onPopBackStack: () -> Unit) {
+    Column {
+        Text(text = "Item: ${item2.name}\nDescription: ${item2.description}")
+        Button(onClick = {
+            onPopBackStack()
+        }) {
+            Text(text = "Back to Home")
+        }
+    }
     // Display item details here
-    Text(text = "Item: ${item2.name}\nDescription: ${item2.description}")
 }
